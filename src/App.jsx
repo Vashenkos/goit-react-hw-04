@@ -1,53 +1,97 @@
-import ContactForm from "./components/ContactForm/ContactForm";  
-import SearchBox from "./components/SearchBox/SearchBox";  
-import ContactList from "./components/ContactList/ContactList";  
-import { useState, useEffect } from "react";  
+import React, { useState, useEffect } from 'react';  
+import axios from 'axios';  
+import SearchBar from './components/SearchBar/SearchBar';  
+import ImageGallery from './components/ImageGalellery/ImageGalellery';  
+import Loader from './components/Loader/Loader';  
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';  
+import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';  
+import ImageModal from './components/ImageModal/ImageModal';  
+import { ToastContainer } from 'react-hot-toast';  
 
-// Прибираємо неправильний імпорт  
-// import App from './src/App'; // цей імпорт не потрібен  
+const API_URL = 'https://api.unsplash.com/photos/';  
+const ACCESS_KEY = '3wbuu2ZWzl1pTV4tbxDtcjf-xJZKkSCoetWrEiQhft4'; // Заміни на свій Access Key  
 
-const initialContacts = [  
-  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },  
-  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },  
-  { id: "id-3", name: "Eden Clements", number: "645-17-79" },  
-  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },  
-];  
+const App = () => {  
+  const [query, setQuery] = useState('');  
+  const [images, setImages] = useState([]);  
+  const [loading, setLoading] = useState(false);  
+  const [error, setError] = useState(null);  
+  const [page, setPage] = useState(1);  
+  const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [selectedImage, setSelectedImage] = useState(null);  
 
-function App() {  
-  const [contacts, setContacts] = useState(() => {  
-    return JSON.parse(localStorage.getItem("contacts")) || initialContacts;  
-  });  
+  // Завантаження зображень  
+  const loadImages = async (searchQuery, pageNumber) => {  
+    setLoading(true);  
+    setError(null);  
 
-  const [filter, setFilter] = useState("");  
+    try {  
+      const response = await axios.get(`${API_URL}?query=${searchQuery}&page=${pageNumber}&client_id=${ACCESS_KEY}`);  
+      setImages(prevImages => [...prevImages, ...response.data]);  
+    } catch (error) {  
+      setError('Error fetching images. Please try again later.');  
+    } finally {  
+      setLoading(false);  
+    }  
+  };  
 
+  // Обробка запиту на пошук  
+  const handleSearch = query => {  
+    setQuery(query);  
+    setImages([]);  
+    setPage(1);  
+    loadImages(query, 1);  
+  };  
+
+  // Завантаження наступної порції зображень  
+  const loadMoreImages = () => {  
+    setPage(prevPage => prevPage + 1);  
+    loadImages(query, page + 1);  
+  };  
+
+  // Відкриття модального вікна  
+  const openModal = image => {  
+    setSelectedImage(image);  
+    setIsModalOpen(true);  
+  };  
+
+  // Закриття модального вікна  
+  const closeModal = () => {  
+    setIsModalOpen(false);  
+    setSelectedImage(null);  
+  };  
+
+  // Ефект для завантаження зображень після зміни запиту  
   useEffect(() => {  
-    localStorage.setItem("contacts", JSON.stringify(contacts));  
-  }, [contacts]);  
-
-  const filterContacts = contacts.filter((contact) =>  
-    contact.name.toLowerCase().includes(filter.toLowerCase())  
-  );  
-
-  const addContact = (newContact) => {  
-    setContacts((prevContacts) => {  
-      return [...prevContacts, newContact];  
-    });  
-  };  
-
-  const deleteContact = (contactId) => {  
-    setContacts((prevContacts) => {  
-      return prevContacts.filter((contact) => contact.id !== contactId);  
-    });  
-  };  
+    if (query) {  
+      loadImages(query, page);  
+    }  
+  }, [query, page]);  
 
   return (  
-    <div className="container">  
-      <h1 className="title">Phonebook</h1>  
-      <ContactForm onAddContact={addContact} />  
-      <SearchBox filter={filter} onFilterChange={setFilter} />  
-      <ContactList contacts={filterContacts} onDeleteContact={deleteContact} />  
+    <div>  
+      <ToastContainer />  
+      <SearchBar onSubmit={handleSearch} />  
+      {error ? (  
+        <ErrorMessage message={error} />  
+      ) : (  
+        <>  
+          <ImageGallery images={images} onImageClick={openModal} />  
+          {loading && <Loader />}  
+          {images.length > 0 && !loading && (  
+            <LoadMoreBtn loadMore={loadMoreImages} />  
+          )}  
+        </>  
+      )}  
+      {selectedImage && (  
+        <ImageModal   
+          isOpen={isModalOpen}   
+          onClose={closeModal}   
+          image={selectedImage}   
+        />  
+      )}  
     </div>  
   );  
-}  
+};  
 
 export default App;
