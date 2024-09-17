@@ -6,7 +6,8 @@ import Loader from './components/Loader/Loader';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';  
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';  
 import ImageModal from './components/ImageModal/ImageModal';  
-import { ToastContainer } from 'react-hot-toast';  
+import { Toaster, toast } from 'react-hot-toast'; // Правильний імпорт  
+
 
 const API_URL = 'https://api.unsplash.com/photos/';  
 const ACCESS_KEY = '3wbuu2ZWzl1pTV4tbxDtcjf-xJZKkSCoetWrEiQhft4'; // Заміни на свій Access Key  
@@ -28,8 +29,12 @@ const App = () => {
     try {  
       const response = await axios.get(`${API_URL}?query=${searchQuery}&page=${pageNumber}&client_id=${ACCESS_KEY}`);  
       setImages(prevImages => [...prevImages, ...response.data]);  
+      if (response.data.length === 0) {  
+        toast.error('No images found for your search.'); // Додайте сповіщення  
+      }  
     } catch (error) {  
       setError('Error fetching images. Please try again later.');  
+      toast.error('Error fetching images. Please try again later.'); // Сповіщення про помилку  
     } finally {  
       setLoading(false);  
     }  
@@ -70,7 +75,7 @@ const App = () => {
 
   return (  
     <div>  
-      <ToastContainer />  
+      <Toaster />  {/* Використання Toaster на верху компонента */}  
       <SearchBar onSubmit={handleSearch} />  
       {error ? (  
         <ErrorMessage message={error} />  
