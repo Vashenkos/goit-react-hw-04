@@ -1,0 +1,17 @@
+.containerBox {  
+    padding: 20px;
+    background-color: #6963b1;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 25px; }
+
+    .inputBox {  
+        padding: 10px;
+        font-size: 16px;
+        color: #0b0202;
+        background-color: #ecf4ee;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }  

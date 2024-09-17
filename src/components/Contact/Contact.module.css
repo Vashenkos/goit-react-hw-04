@@ -1,0 +1,44 @@
+.list {
+    display: flex;
+    padding: 0;
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+    background-color: #6963b1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: space-around;
+  }
+.buttonlist {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 30px;
+    border-radius: 6px;
+    border: none;
+    color: #fafafa;
+    cursor: pointer;
+    background-color: rgb(11, 10, 10);
+    transition: all 250ms ease-in-out;
+    &:hover {
+      background-color: red;
+      transform: scale(1.1);
+    }
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .contdiv{
+    display: flex;  
+    flex-direction: column;
+    gap: 12px;
+  }
+  .icon{
+    margin-right: 9px; 
+    vertical-align: middle;
+
+
+  }
