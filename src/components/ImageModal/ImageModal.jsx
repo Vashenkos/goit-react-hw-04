@@ -1,24 +1,38 @@
+import Modal from "react-modal";
+import styles from "./ImageModal.module.css";
 
-import Modal from 'react-modal';  
-import s from "./ImageModal.module.css";
+Modal.setAppElement("#root");
 
-const ImageModal = ({ isOpen, onClose, image }) => {  
-  return (  
-    <Modal isOpen={isOpen} onRequestClose={onClose}> 
-      <button onClick={onClose}>Close</button>  
-      <div className={s.wraper}>
-      <img className={s.image}
-      src={image.urls.regular} 
-      alt={image.alt_description} />
-      <ul className={s.list}>
-        
-      <li className={s.item}>Автор: {image.user.name}</li>   
-      <li className={s.item}>Лайки: {image.likes}</li>  
-      <li className={s.item}>Опис: {image.alt_description}</li> 
-      </ul>   
+function ImageModal({ image, onClose }) {
+  const formattedDate = new Date(image.created_at).toLocaleDateString("en-GB");
+
+  const formattedDescription = image.alt_description
+    ? image.alt_description.charAt(0).toUpperCase() +
+      image.alt_description.slice(1)
+    : "No description available";
+
+  return (
+    <Modal
+      isOpen={!!image}
+      onRequestClose={onClose}
+      className={styles.modal}
+      overlayClassName={styles.overlay}
+    >
+      <div className={styles.modal_wrapper}>
+        <img
+          className={styles.image}
+          src={image.urls.regular}
+          alt={image.alt_description}
+        />
+        <ul className={styles.list}>
+          <li className={styles.item}>Author: {image.user.name}</li>
+          <li className={styles.item}>Likes: {image.likes}</li>
+          <li className={styles.item}>{formattedDescription}</li>
+          <li className={styles.item}>{formattedDate}</li>
+        </ul>
       </div>
-    </Modal>  
-  );  
-};  
+    </Modal>
+  );
+}
 
-export default ImageModal;  
+export default ImageModal;

@@ -1,12 +1,18 @@
   import ImageCard from './ImageCard';  
   import s from "./ImageG.module.css";
+
+
+
+
 const ImageGallery = ({ images, onImageClick  }) => {  
   return (  
-    <ul className={s.listCard}>  
+    <ul className={s.list }> 
+    <li>  
       {images.map(image => (  
-        <ImageCard key={image.id} image={image} onImageClick={onImageClick}  />  
+        <ImageCard image={image} onImageClick={onImageClick} className={s.image}    />  
       ))}  
-    </ul>  
+    </li>  
+    </ul>
   );  
 };  
 

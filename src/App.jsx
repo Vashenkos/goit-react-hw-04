@@ -5,7 +5,7 @@ import ImageGallery from './components/ImageGalellery/ImageGalellery';
 import Loader from './components/Loader/Loader';  
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';  
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';  
-import ImageModal from './components/ImageModal/ImageModal';  
+import ImageModal from './components/ImageModal/ImageModal'; 
 import { Toaster, toast } from 'react-hot-toast'; 
 
 
@@ -74,7 +74,7 @@ const App = () => {
   }, [query, page]);  
 
   return (  
-    <div>  
+    <div >  
       <Toaster />  
       <SearchBar onSubmit={handleSearch} />  
       {error ? (  
