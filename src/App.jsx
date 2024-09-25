@@ -60,7 +60,7 @@ const App = () => {
     setIsModalOpen(true);  
   };  
 
-  // Закриття модального вікна  
+  
   const closeModal = () => {  
     setIsModalOpen(false);  
     setSelectedImage(null);  
