@@ -1,6 +1,6 @@
 import React, { useState } from 'react';  
 import { toast } from 'react-hot-toast';  
-
+import s from "./SearchBar.module.css"
 const SearchBar = ({ onSubmit }) => {  
   const [query, setQuery] = useState('');  
 
@@ -19,7 +19,7 @@ const SearchBar = ({ onSubmit }) => {
   return (  
     <header>  
       <form onSubmit={handleSubmit}>  
-        <input  
+        <input  className={s.input}
           type="text"  
           value={query}  
           onChange={handleChange}  
