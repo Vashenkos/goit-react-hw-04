@@ -1,9 +1,6 @@
   import ImageCard from './ImageCard';  
   import s from "./ImageG.module.css";
 
-
-
-
 const ImageGallery = ({ images, onImageClick  }) => {  
   return (  
     <ul className={s.list }> 
